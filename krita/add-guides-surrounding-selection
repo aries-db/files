@@ -1,13 +1,19 @@
 application = Krita.instance()
 current_document = application.activeDocument()
+
+current_document.setHorizontalGuides([])
+current_document.setVerticalGuides([])
+
 selection = current_document.selection()
 
-horizental_guides = current_document.horizentalGuides()
-horizental_guides.append(selection.x())
-horizental_guides.append(selection.x() + selection.height())
-current_document.setHorizentalGuides(horizental_guides)
+horizental_guides = current_document.horizontalGuides()
+horizental_guides.append(selection.y())
+horizental_guides.append(selection.y() + selection.height())
+current_document.setHorizontalGuides(horizental_guides)
 
 vertical_guides = current_document.verticalGuides()
-vertical_guides.append(selection.y())
-vertical_guides.append(selection.y() + selection.width())
+vertical_guides.append(selection.x())
+vertical_guides.append(selection.x() + selection.width())
 current_document.setVerticalGuides(vertical_guides)
+
+current_document.refreshProjection()
