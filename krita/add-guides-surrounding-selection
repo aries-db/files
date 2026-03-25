@@ -1,0 +1,13 @@
+application = Krita.instance()
+current_document = application.activeDocument()
+selection = current_document.selection()
+
+horizental_guides = current_document.horizentalGuides()
+horizental_guides.append(selection.x())
+horizental_guides.append(selection.x() + selection.height())
+current_document.setHorizentalGuides(horizental_guides)
+
+vertical_guides = current_document.verticalGuides()
+vertical_guides.append(selection.y())
+vertical_guides.append(selection.y() + selection.width())
+current_document.setVerticalGuides(vertical_guides)
