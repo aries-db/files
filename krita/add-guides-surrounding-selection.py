@@ -1,6 +1,7 @@
 application = Krita.instance()
 current_document = application.activeDocument()
 
+# delete current guides if any
 current_document.setHorizontalGuides([])
 current_document.setVerticalGuides([])
 
@@ -17,3 +18,9 @@ vertical_guides.append(selection.x() + selection.width())
 current_document.setVerticalGuides(vertical_guides)
 
 current_document.refreshProjection()
+
+action = Krita.instance().action('view_show_guides')
+
+if action:
+    if action.isChecked() == False:
+        action.setChecked(True)
