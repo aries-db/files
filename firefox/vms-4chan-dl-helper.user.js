@@ -18,16 +18,17 @@ window.download_as_file = download_as_file;
 function download_as_file(){
   link_list.push('\n');
   download("4chan-aria-input-list-" + link_list.length + "-" + Date.now() + ".txt",link_list.join('\n'));
+  show_message('file downloaded') ;
 }
 
 function copyToClipboard(text) {
   navigator.clipboard.writeText(text+'\n').then(function() {
     // document.title = 'YES! Async: Copying to clipboard was successful!' ;
-    document.title = 'copied at ' + (x = new Date(), x.getHours()+':'+x.getMinutes() +':'+ x.getSeconds() )
-    console.log('Async: Copying to clipboard was successful!');
+    show_message('copied at ' + (x = new Date(), x.getHours()+':'+x.getMinutes() +':'+ x.getSeconds() ));
+    show_message('Async: Copying to clipboard was successful!');
   }, function(err) {
-    document.title = 'ERROR OHNO! Async: Could not copy text: '+  err ;
-    console.error('Async: Could not copy text: ', err);
+    show_message('FFF OHNO! Async: Could not copy text: '+  err );
+    show_message('Async: Could not copy text: ', err);
   });
 }
 function print_links() {
@@ -42,31 +43,45 @@ function print_links() {
 
 document.querySelectorAll(".postContainer").forEach((function(e, n) {
     e.addEventListener("click", (function(event) {
+
+      it = e.querySelector(".download-button");
+      if (!it) return ;
+
+
       if (event.ctrlKey) {
         // Code to execute when Ctrl + Left Click occurs
         console.log('Ctrl + Left Click detected!');
-       // handle removal from link_list
-        // Prevent the default browser behavior (e.g., opening link in new tab)
+        index = link_list.indexOf(it.href);
+        if (index > -1) {
+            link_list.splice(index, 1);
+            show_message('- ' + it.href);
+            it.style.filter = "opacity(1)";
+            e.querySelector("input[type=checkbox]").checked = false ;
+        }
        // event.preventDefault();
     } else {
         // Code to execute for a regular left click
         console.log('Regular Left Click detected.');
-              it = e.querySelector(".download-button")
-        console.log(it.href)
         if (link_list.indexOf(it.href) === -1) {
             link_list.push(it.href) ;
         }
+        show_message('+ ' + it.href);
         it.style.filter = "opacity(0.3)";
-        e.querySelector("input[type=checkbox]").checked = !0 ;
+        e.querySelector("input[type=checkbox]").checked = true ;
     }
-
-
-
-
 
     }))
 }))
+function show_message(message){
+  document.dispatchEvent(new CustomEvent('CreateNotification', {
+              detail: {
+                type: 'info',
+                content: message,
+                lifetime: 1
+              }
+            }));
 
+}
 
 function download(filename, text) {
   var element = document.createElement('a');
@@ -114,8 +129,6 @@ document.addEventListener("keydown", (function(e) {
     link_list = old_list.concat(link_list) ;
     localStorage.setItem('lines',old_list.join('|'));
     */
-
-
 
 }));
 
